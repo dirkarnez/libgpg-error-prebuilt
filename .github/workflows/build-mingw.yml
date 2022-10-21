@@ -43,7 +43,7 @@ jobs:
             g++ --version && 
             ./autogen.sh
             ./configure --help &&
-            ./configure --disable-shared --prefix="$(pwd)/${{ env.installationPath }}" &&
+            ./configure --disable-shared --disable-languages --disable-doc --disable-tests --prefix="$(pwd)/${{ env.installationPath }}" &&
             make VERBOSE=1 && make install
             
       - name: Archive Release
