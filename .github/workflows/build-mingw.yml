@@ -13,13 +13,14 @@ jobs:
     env:
       libraryName: libgpg-error
       installationPath: libgpg-error-installation
-      tagName: libgpg-error-1.47
       mingwTargetZip: libgpg-error-${{ github.ref_name }}-mingw64-x86_64-posix-seh-rev0-8.1.0.zip
     steps:
-      - name: git clone
-        shell: cmd
-        run: git clone --recurse-submodules https://dev.gnupg.org/source/libgpg-error.git && cd libgpg-error && git checkout ${{ env.tagName }}
-        
+      #       tagName: libgpg-error-1.47
+      # - name: git clone
+      #   shell: cmd
+      #   run: git clone --recurse-submodules https://dev.gnupg.org/source/libgpg-error.git && cd libgpg-error && git checkout ${{ env.tagName }}
+      - uses: actions/checkout@v3
+      
       - name: Install MSYS2
         uses: msys2/setup-msys2@v2
         with:
@@ -28,12 +29,17 @@ jobs:
           
       - name: curl x86_64-8.1.0-release-posix-seh-rt_v6-rev0.7z
         shell: cmd
-        run:  cd /d ${{ github.workspace }} && curl https://github.com/2641797006/c/blob/master/GCC-zip/x86_64-8.1.0-release-posix-seh-rt_v6-rev0.7z?raw=true -L --output x86_64-8.1.0-release-posix-seh-rt_v6-rev0.7z && dir && 7z.exe x x86_64-8.1.0-release-posix-seh-rt_v6-rev0.7z
+        run:  curl https://github.com/2641797006/c/blob/master/GCC-zip/x86_64-8.1.0-release-posix-seh-rt_v6-rev0.7z?raw=true -L --output x86_64-8.1.0-release-posix-seh-rt_v6-rev0.7z && dir && 7z.exe x x86_64-8.1.0-release-posix-seh-rt_v6-rev0.7z
       
       - name: curl PortableGit-2.38.1-64-bit.7z.exe
         shell: cmd
-        run:  cd /d ${{ github.workspace }} && curl https://github.com/git-for-windows/git/releases/download/v2.38.1.windows.1/PortableGit-2.38.1-64-bit.7z.exe -L --output PortableGit-2.38.1-64-bit.7z.exe && dir && 7z.exe x PortableGit-2.38.1-64-bit.7z.exe -o"${{ github.workspace }}\PortableGit-2.38.1-64-bit"
-       
+        run:  curl https://github.com/git-for-windows/git/releases/download/v2.38.1.windows.1/PortableGit-2.38.1-64-bit.7z.exe -L --output PortableGit-2.38.1-64-bit.7z.exe && dir && 7z.exe x PortableGit-2.38.1-64-bit.7z.exe -o"${{ github.workspace }}\PortableGit-2.38.1-64-bit"
+
+      - shell: cmd
+        run: |
+          .\PortableGit-2.38.1-64-bit\usr\bin\tar.exe -jxvf libgpg-error-1.47.tar.bz2 &&^
+          rename libgpg-error-1.47 libgpg-error
+          
       - name: set PATH, check mingw version, cmake generate, build and install
         shell: msys2 {0}
         run: |
