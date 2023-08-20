@@ -49,8 +49,9 @@ jobs:
             g++ --version && 
             ./autogen.sh
             ./configure --help &&
-            ./configure --enable-static --disable-languages --disable-doc --disable-tests --prefix="$(pwd)/${{ env.installationPath }}" &&
-            make VERBOSE=1 && make install
+            mkdir -pv "$(pwd)/${{ env.installationPath }}/sysroot" &&
+            ./configure --with-sysroot="$(pwd)/${{ env.installationPath }}/sysroot" --enable-static --disable-languages --disable-doc --disable-tests --prefix="$(pwd)/${{ env.installationPath }}" &&
+            mingw32-make install
             
       - name: Archive Release
         uses: thedoctor0/zip-release@master
