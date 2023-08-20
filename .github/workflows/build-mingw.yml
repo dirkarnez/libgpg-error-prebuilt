@@ -9,16 +9,16 @@ on:
 jobs:
   build:
     name: Create Release
-    runs-on: windows-2019
+    runs-on: windows-latest
     env:
       libraryName: libgpg-error
       installationPath: libgpg-error-installation
-      tagName: libgpg-error-1.46
-      mingwTargetZip: libgpg-error-${{ github.ref_name }}-x86_64-posix-seh-rev0-8.1.0.zip
+      tagName: libgpg-error-1.47
+      mingwTargetZip: libgpg-error-${{ github.ref_name }}-mingw64-x86_64-posix-seh-rev0-8.1.0.zip
     steps:
       - name: git clone
         shell: cmd
-        run: git clone --recursive https://dev.gnupg.org/source/libgpg-error.git && cd libgpg-error && git checkout ${{ env.tagName }}
+        run: git clone --recurse-submodules https://dev.gnupg.org/source/libgpg-error.git && cd libgpg-error && git checkout ${{ env.tagName }}
         
       - name: Install MSYS2
         uses: msys2/setup-msys2@v2
